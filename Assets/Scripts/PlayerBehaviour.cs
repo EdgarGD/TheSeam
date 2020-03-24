@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,7 +10,6 @@ using UnityEngine.Android;
 public class PlayerBehaviour : MonoBehaviour
 {
     [Header("Player Attributes")]
-    
     public int Health = 5;    // значение здоровья игрока не менять!
     public int Attack = 1;
     public float Speed = 4;
@@ -19,105 +17,84 @@ public class PlayerBehaviour : MonoBehaviour
     //public Transform Platform;
     [Range(1, 10)]
     public float JumpingVelocity;
-    public float platformJump = 10;
+    public float PlatformJump = 10;
     public bool DoubleJump = false;
-    public bool wasHit = false;
-    [HideInInspector]
-    public bool IsAlive = true;
-    [HideInInspector]
-    public bool isOnSky;
+    public bool WasHit = false;
+    [HideInInspector] public bool IsAlive = true;
+    [HideInInspector] public bool IsOnSky;
 
     [Header("Enemy Settings")]
-    [Range(0, 1)]
-    public float DamageTime;
+    [Range(0, 1)] public float DamageTime;
 
     [Header("Input Settings")]
-    //   public KeyCode JumpButton = KeyCode.Space;
-    //  public KeyCode AttackButton = KeyCode.E;
     public bool KeyboardInput = false;          //Управление с клавиатуры
-
-    [HideInInspector]
-    public float MInput;                        //Движение персонажа
+    [HideInInspector] public float MInput;                        //Движение персонажа
 
     [Header("Audio settings")]
     public AudioSource ASourсe;
-    private AudioSource  ASourсeC;
+    private AudioSource  audioSourсeC;
     public AudioClip[] FootstepsSounds;
     public AudioClip[] AttackSounds;
     public AudioClip[] JumpSounds;
     public AudioClip[] HitSounds;
-    public float jumpVelosThreshold;
+    [HideInInspector] public float JumpVelosThreshold = 2.5f;
 
     [Header("Physics")]
+    [Range(1, 1.3f)] public float FallAccelerationValue = 1.055f;
+    [HideInInspector] public bool Acc;
+    [HideInInspector] public float AccelerationPower;
+    [Range(1, 6)] public float AccelerationTime = 6f;
+    [Range(1, 6)] public float DecelerationTime = 6f;
+    [HideInInspector] public float RunDir;
 
-    [Range(1, 1.3f)]
-    public float FallAccelerationValue = 1.055f;
-    [HideInInspector]
-    public bool Acc;
-    [HideInInspector]
-    public float AccelerationPower;
-    [Range(1, 6)]
-    public float AccelerationTime = 6f;
-    [Range(1, 6)]
-    public float DecelerationTime = 6f;
-    [HideInInspector]
-    public float runDir;
     [Header("Ground/Layers")]
     public Transform Feet;
-    public float feetRadius;
+    public float FeetRadius;
     public LayerMask Groundlayer;
-    
-    public bool wasGrounded = true;
+    public bool WasGrounded = true;
+    public bool IsGrounded = false;
     public GameObject ParticleEffect;
 
-    public bool isGrounded = false;
-    [Header("Animation")]
-    public Animator Anim;
-
-    [HideInInspector]
-    public int JumpsNum;
-
-    [HideInInspector]
-    public Rigidbody2D rb;
+    [HideInInspector] public Animator Anim;
+    [HideInInspector] public int JumpsNum;
+    [HideInInspector] public Rigidbody2D Rigidbody;
     
     [Header("PlayerStates")]
     public PlayerStates State = PlayerStates.Idling;
     public enum PlayerStates { Idling, Jumping, Falling, ReceivingDamage, Attacking, Walking, Dying };
+
     [Header("Other")]
-    public List<GameObject> GameObjectsinView = new List<GameObject>();
-    public Collider2D currentPlatform;
+    [HideInInspector] public List<GameObject> GameObjectsinView = new List<GameObject>();
+    [HideInInspector] public Collider2D CurrentPlatform;
     
     private Collider2D playerCollider;
 
-    private float scale;
+    private float _scale;
     private Vector2 _currentPosition;
     private Vector2 _endPosition;
 
     private KnockBack _knockBack;     // экземпляр класса KnockBack, который отталкивает противника
-    public KeyboardInput _keyboardInput;
+    public KeyboardInput KeyboardInputC;
 
     void Awake()
     {
         playerCollider = GetComponent<Collider2D>();
         Anim = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = 2;
-        scale = transform.localScale.x;
+        Rigidbody = GetComponent<Rigidbody2D>();
+        Rigidbody.gravityScale = 2;
+        _scale = transform.localScale.x;
 
         _knockBack = GetComponent<KnockBack>();
         ASourсe = GetComponent<AudioSource>();
 
-        ASourсeC = GetComponentInChildren<AudioSource>();
+        audioSourсeC = GetComponentInChildren<AudioSource>();
 
-        //if (KeyboardInput)
-        //{
-            _keyboardInput = GetComponent<KeyboardInput>();
-       // }
+            KeyboardInputC = GetComponent<KeyboardInput>();
     }
 
     private void Start()
     {
-        string Scname = SceneManager.GetActiveScene().name;
+        string Scname = SceneManager.GetActiveScene().name; //Это вынести в отдельный метод
         for (int i =1; i <= 5; i++)//с какой по какую сцену должна быть скорость одинаковой
         {
             if (Scname == "Level" + i)
@@ -140,13 +117,11 @@ public class PlayerBehaviour : MonoBehaviour
         {
             IsAlive = false;
         }
-        if (wasGrounded && !isGrounded || !wasGrounded && isGrounded)
-        {Instantiate(ParticleEffect, Feet.position-new Vector3(0,0.5f,0), ParticleEffect.transform.rotation);
-        wasGrounded = isGrounded;}
-        
-        if (wasGrounded && !isGrounded || !wasGrounded && isGrounded)
-        {Instantiate(ParticleEffect, Feet.position-new Vector3(0,0.5f,0), ParticleEffect.transform.rotation);
-        wasGrounded = isGrounded;}
+        if ((WasGrounded && !IsGrounded || !WasGrounded && IsGrounded) && ParticleEffect !=null)
+        {
+            Instantiate(ParticleEffect, Feet.position - new Vector3(0, 0.5f, 0), ParticleEffect.transform.rotation);
+            WasGrounded = IsGrounded;
+        }
         
         GetPlayerStates();               // при мерже - оставить эту строку
 
@@ -154,7 +129,7 @@ public class PlayerBehaviour : MonoBehaviour
         {
             if (KeyboardInput)
             {
-                _keyboardInput.KeyboardWalkAndAttack();
+                KeyboardInputC.KeyboardWalkAndAttack();
             }
             else
             {
@@ -171,7 +146,6 @@ public class PlayerBehaviour : MonoBehaviour
         {
             State = PlayerStates.Dying;
             GetComponent<Collider2D>().enabled = false;
-            //GameObject.FindGameObjectWithTag("LiveCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow = null;
         }
         if (Anim.GetBool("ReceiveDamage"))
         {
@@ -204,16 +178,19 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void Hit(int takenDamage)
     {
-        if (!wasHit)
-        {Health -= takenDamage;
-        StartCoroutine(makeInvincible(3f));}
+        if (!WasHit)
+        {
+            Health -= takenDamage;
+            StartCoroutine(MakeInvincible(3f));
+        }
     }
 
-    public IEnumerator makeInvincible(float t){
-        wasHit = true;
+    public IEnumerator MakeInvincible(float t)
+    {
+        WasHit = true;
         Debug.Log("I am invincible!");
         yield return new WaitForSeconds(t);
-        wasHit = false;
+        WasHit = false;
         Debug.Log("I am not:(!");
     }
     
@@ -243,28 +220,27 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if (Acc)
         {
-            rb.velocity = new Vector2(MInput * AccelerationPower, rb.velocity.y);
+            Rigidbody.velocity = new Vector2(MInput * AccelerationPower, Rigidbody.velocity.y);
         }
         else
         {
-            rb.velocity = new Vector2(runDir * AccelerationPower, rb.velocity.y);
+            Rigidbody.velocity = new Vector2(RunDir * AccelerationPower, Rigidbody.velocity.y);
         }
         
-        isGrounded = Physics2D.OverlapCircle(Feet.position, feetRadius, Groundlayer);
-        
+        IsGrounded = Physics2D.OverlapCircle(Feet.position, FeetRadius, Groundlayer);
     }
 
     public void Jump()    // прыжок для мобильных устройств, вызывается по нажатию кнопки в MobileInput
     {
         if (!DoubleJump)
         {
-            if (isGrounded && State != PlayerStates.ReceivingDamage)
+            if (IsGrounded && State != PlayerStates.ReceivingDamage)
             {
-                rb.velocity = Vector2.up * JumpingVelocity * 3;
+                Rigidbody.velocity = Vector2.up * JumpingVelocity * 3;
             }
-            if (rb.velocity.y < 0) //Ускорение падения
+            if (Rigidbody.velocity.y < 0) //Ускорение падения
             {
-                rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * FallAccelerationValue);
+                Rigidbody.velocity = new Vector2(Rigidbody.velocity.x, Rigidbody.velocity.y * FallAccelerationValue);
             }
         }
         else
@@ -272,9 +248,9 @@ public class PlayerBehaviour : MonoBehaviour
             if (JumpsNum < 1)
             {
                 ++JumpsNum;
-                rb.velocity = (Vector2.up * JumpingVelocity) + new Vector2(rb.velocity.x, 0);
+                Rigidbody.velocity = (Vector2.up * JumpingVelocity) + new Vector2(Rigidbody.velocity.x, 0);
             }
-            else if (isGrounded && JumpsNum > 0)
+            else if (IsGrounded && JumpsNum > 0)
             {
                 JumpsNum = 0;
             }
@@ -291,7 +267,7 @@ public class PlayerBehaviour : MonoBehaviour
         {
             var target = obj.collider.gameObject;
 
-          if(State!= PlayerStates.Attacking && State!= PlayerStates.Walking && State!=PlayerStates.ReceivingDamage)
+            if(State!= PlayerStates.Attacking && State!= PlayerStates.Walking && State!=PlayerStates.ReceivingDamage)
             {
                 if (target.CompareTag("Enemy"))   // игрок увидел противника
                 {
@@ -346,22 +322,22 @@ public class PlayerBehaviour : MonoBehaviour
     public void AnimationController()
     {
         Anim.SetFloat("Speed", Mathf.Abs(MInput));
-        Anim.SetFloat("JumpVeloc", rb.velocity.y);
+        Anim.SetFloat("JumpVeloc", Rigidbody.velocity.y);
         if (State == PlayerStates.Walking) 
         {
-            Anim.speed = rb.velocity.x / 8; //Изменение скорости анимации бега в зависимости от скорости персонажа.
+            Anim.speed = Rigidbody.velocity.x / 8; //Изменение скорости анимации бега в зависимости от скорости персонажа.
         }
 
         if (MInput < 0)
         {
-            transform.localScale = new Vector3(-scale, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(-_scale, transform.localScale.y, transform.localScale.z);
         }
         else if (MInput > 0)
         {
-            transform.localScale = new Vector3(scale, transform.localScale.y, transform.localScale.z);
+            transform.localScale = new Vector3(_scale, transform.localScale.y, transform.localScale.z);
         }
 
-        Anim.SetBool("IsGrounded", isGrounded);
+        Anim.SetBool("IsGrounded", IsGrounded);
 
         if(GameManager.Gm.GameState == GameManager.GameStates.BeatLevel)
         {
@@ -371,41 +347,32 @@ public class PlayerBehaviour : MonoBehaviour
 
     public void PlayAudioClipEvent()
     {
-        if (Anim.GetBool("Attack"))
+        if (Anim.GetBool("Attack") && AttackSounds.Length > 0)
         {
             ASourсe.PlayOneShot(AttackSounds[Random.Range(0, AttackSounds.Length)]);
         }
-        if (Anim.GetFloat("Speed") >= 0.01f && isGrounded == true)
+        if (Anim.GetFloat("Speed") >= 0.01f && IsGrounded == true && FootstepsSounds.Length > 0)
         {
-            if(!ASourсeC.isPlaying)
-            ASourсeC.PlayOneShot(FootstepsSounds[Random.Range(0, FootstepsSounds.Length)]);
+            if (!audioSourсeC.isPlaying)
+            {
+                audioSourсeC.PlayOneShot(FootstepsSounds[Random.Range(0, FootstepsSounds.Length)]);
+            }
         }
-        if (Anim.GetFloat("JumpVeloc") > jumpVelosThreshold)
+        if (Anim.GetFloat("JumpVeloc") > JumpVelosThreshold && JumpSounds.Length>0)
         {
             ASourсe.PlayOneShot(JumpSounds[Random.Range(0, JumpSounds.Length)]);
         }
-        if (Anim.GetBool("ReceiveDamage"))
+        if (Anim.GetBool("ReceiveDamage") && HitSounds.Length > 0)
         {
             ASourсe.PlayOneShot(HitSounds[Random.Range(0, HitSounds.Length)]);
         }
     }
 
-    
-    //void OnDrawGizmosSelected()      // показывает поле зрения игрока
-    //{    
-    //    Gizmos.color = Color.red;
-
-    //    _currentPosition = new Vector2(transform.position.x, SightDistance.position.y);
-    //    _endPosition = new Vector2(SightDistance.position.x, SightDistance.position.y);
-
-    //    Gizmos.DrawLine(_currentPosition, _endPosition);
-    //}
-
     void OnDrawGizmosSelected()      // показывает поле зрения игрока
     {
         Gizmos.color = Color.blue;
 
-        Gizmos.DrawWireSphere(Feet.position, feetRadius);
+        Gizmos.DrawWireSphere(Feet.position, FeetRadius);
     }
 
    

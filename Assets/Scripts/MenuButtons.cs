@@ -32,7 +32,7 @@ public class MenuButtons : MonoBehaviour
         SceneManager.LoadScene(idScene);
     }
 
-    public void openURL(string sait) 
+    public void OpenURL(string sait) 
     { 
         Application.OpenURL(sait); 
     }

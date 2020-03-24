@@ -43,7 +43,7 @@ public class KeyboardInput : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
             {
-                _player.runDir = _player.MInput;
+                _player.RunDir = _player.MInput;
             }
         }
 
@@ -65,7 +65,7 @@ public class KeyboardInput : MonoBehaviour
                 break;
             case kJumpStage.Track:
                 {
-                    if (_player.rb.velocity.y < 0)
+                    if (_player.Rigidbody.velocity.y < 0)
                     {
                         JumpStage = kJumpStage.Levitate;
                     }
@@ -75,7 +75,7 @@ public class KeyboardInput : MonoBehaviour
                 {
                     LevitateTimer += Time.deltaTime;
                     if (LevitateTimer > LevitateTime) JumpStage = kJumpStage.None;
-                    _player.rb.velocity = new Vector2(_player.rb.velocity.x, 0);
+                    _player.Rigidbody.velocity = new Vector2(_player.Rigidbody.velocity.x, 0);
                     Platform.gameObject.SetActive(true);
 
                     _player.Anim.SetBool("isGrounded", true);
@@ -123,13 +123,13 @@ public class KeyboardInput : MonoBehaviour
         }
         if (_player.Acc)
         {
-            _player.rb.velocity = new Vector2(_player.MInput * _player.Speed, _player.rb.velocity.y);
+            _player.Rigidbody.velocity = new Vector2(_player.MInput * _player.Speed, _player.Rigidbody.velocity.y);
         }
         else
         {
-            _player.rb.velocity = new Vector2(_player.runDir * _player.Speed, _player.rb.velocity.y);
+            _player.Rigidbody.velocity = new Vector2(_player.RunDir * _player.Speed, _player.Rigidbody.velocity.y);
         }
-        _player.isGrounded = Physics2D.OverlapCircle(_player.Feet.position, _player.feetRadius, _player.Groundlayer);
+        _player.IsGrounded = Physics2D.OverlapCircle(_player.Feet.position, _player.FeetRadius, _player.Groundlayer);
 
         KeyboardJump();
 
@@ -157,11 +157,11 @@ public class KeyboardInput : MonoBehaviour
             _player.Jump();
             _player.JumpsNum++;
         }
-        if (_player.rb.velocity.y < 0)            //Ускорение падения
+        if (_player.Rigidbody.velocity.y < 0)            //Ускорение падения
         {
-            _player.rb.velocity = new Vector2(_player.rb.velocity.x, _player.rb.velocity.y * _player.FallAccelerationValue);
+            _player.Rigidbody.velocity = new Vector2(_player.Rigidbody.velocity.x, _player.Rigidbody.velocity.y * _player.FallAccelerationValue);
         }
-        if (_player.isGrounded)
+        if (_player.IsGrounded)
         {
             _player.JumpsNum = 0;
         }
@@ -180,24 +180,24 @@ public class KeyboardInput : MonoBehaviour
 
     public void SwitchUp()
     {
-        if (_player.isGrounded && !_player.isOnSky)
+        if (_player.IsGrounded && !_player.IsOnSky)
         {
-            _player.rb.velocity = Vector2.up * _player.platformJump * 3.5f;
+            _player.Rigidbody.velocity = Vector2.up * _player.PlatformJump * 3.5f;
 
-            if (_player.currentPlatform != null)
+            if (_player.CurrentPlatform != null)
             {
-                _player.currentPlatform.enabled = true;
+                _player.CurrentPlatform.enabled = true;
             }
             Debug.Log("Up");
         }
     }
     public void SwitchDown()
     {
-        if (_player.isGrounded && _player.isOnSky)
+        if (_player.IsGrounded && _player.IsOnSky)
         {
-            if (_player.currentPlatform != null)
+            if (_player.CurrentPlatform != null)
             {
-                _player.currentPlatform.enabled = false;
+                _player.CurrentPlatform.enabled = false;
             }
             Debug.Log("Doun");
         }

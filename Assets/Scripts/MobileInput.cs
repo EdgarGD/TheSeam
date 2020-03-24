@@ -47,27 +47,27 @@ public class MobileInput : MonoBehaviour
     {
         left = true;
         main.Acc = true;
-        main.runDir = main.MInput;
+        main.RunDir = main.MInput;
     }
     public void LeftUp()
     {
         left = false;
         main.Acc = false;
-        main.runDir = main.MInput;
+        main.RunDir = main.MInput;
     }
 
     public void RightDown()
     {
         right = true;
         main.Acc = true;
-        main.runDir = main.MInput;
+        main.RunDir = main.MInput;
     }
 
     public void RightUp()
     {
         right = false;
         main.Acc = false;
-        main.runDir = main.MInput;
+        main.RunDir = main.MInput;
     }
 
     public void Jump()
@@ -85,24 +85,24 @@ public class MobileInput : MonoBehaviour
 
     public void SwitchUp()//Переход между платформами
     {
-        if (main.isGrounded && !main.isOnSky)
+        if (main.IsGrounded && !main.IsOnSky)
         {
-            main.rb.velocity = Vector2.up * main.platformJump * 3.5f;
+            main.Rigidbody.velocity = Vector2.up * main.PlatformJump * 3.5f;
 
-            if (main.currentPlatform != null)
+            if (main.CurrentPlatform != null)
             {
-                main.currentPlatform.enabled = true;
+                main.CurrentPlatform.enabled = true;
             }
             Debug.Log("Up");
         }
     }
     public void SwitchDown()//Переход между платформами
     {
-        if (main.isGrounded && main.isOnSky)
+        if (main.IsGrounded && main.IsOnSky)
         {
-            if (main.currentPlatform != null)
+            if (main.CurrentPlatform != null)
             {
-                main.currentPlatform.enabled = false;
+                main.CurrentPlatform.enabled = false;
             }
             Debug.Log("Doun");
         }

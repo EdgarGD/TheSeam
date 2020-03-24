@@ -18,22 +18,21 @@ public class Transition : MonoBehaviour
     }
 
     private void Update() {
-        
+
         if (playerGameObject.transform.position.y < transform.localPosition.y)
-           
-           {
-                player.isOnSky = false;  
-           }
-           else if (playerGameObject.transform.position.y >= transform.position.y)  
-           {
-               player.isOnSky = true;
-               
-           }
+        {
+            player.IsOnSky = false;
+        }
+        else if (playerGameObject.transform.position.y >= transform.position.y)
+        {
+            player.IsOnSky = true;
+
+        }
               
     }
 
     public void OnCollisionEnter2D(Collision2D other){
-        player.currentPlatform = GetComponent<BoxCollider2D>();
+        player.CurrentPlatform = GetComponent<BoxCollider2D>();
     }
   
 

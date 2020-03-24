@@ -512,7 +512,7 @@ SpriteRenderer:
   m_Size: {x: 3.74, y: 1.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &8681529210375779322
@@ -924,15 +924,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99680648c62cd514298f83821bd7f526, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: 3
+  Health: 5
   Attack: 1
-  Speed: 8
+  Speed: 10
   SightDistance: {fileID: 6946523604535057570}
   JumpingVelocity: 6.5
-  platformJump: 10
+  PlatformJump: 10
   DoubleJump: 0
+  WasHit: 0
   IsAlive: 1
-  isOnSky: 0
+  IsOnSky: 0
   DamageTime: 0.5
   KeyboardInput: 1
   MInput: 0
@@ -950,29 +951,29 @@ MonoBehaviour:
   AttackSounds: []
   JumpSounds: []
   HitSounds: []
-  jumpVelosThreshold: 2.5
+  JumpVelosThreshold: 2.5
   FallAccelerationValue: 1.007
   Acc: 0
   AccelerationPower: 0
   AccelerationTime: 6
   DecelerationTime: 6
-  runDir: 0
+  RunDir: 0
   Feet: {fileID: 2584852008678484895}
-  feetRadius: 0.44
+  FeetRadius: 0.3
   Groundlayer:
     serializedVersion: 2
     m_Bits: 256
-  SkyLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  isGrounded: 0
+  WasGrounded: 1
+  IsGrounded: 0
+  ParticleEffect: {fileID: 1396828787896817875, guid: 63ed55c6863dde349aeee198a6dee441,
+    type: 3}
   Anim: {fileID: 0}
   JumpsNum: 0
-  rb: {fileID: 0}
+  Rigidbody: {fileID: 0}
   State: 0
   GameObjectsinView: []
-  currentPlatform: {fileID: 0}
-  _keyboardInput: {fileID: 5721327426033010748}
+  CurrentPlatform: {fileID: 0}
+  KeyboardInputC: {fileID: 5721327426033010748}
 --- !u!114 &7892449465916758305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1122,7 +1123,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1232438331538912992}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 6200000, guid: bc240d5f37fb93248853edcb186e2d03, type: 2}
   m_IsTrigger: 0

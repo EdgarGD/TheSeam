@@ -10,6 +10,8 @@ public class KeyboardInput : MonoBehaviour
 
     private PlayerBehaviour _player;
 
+    Rigidbody2D _rb;
+
     enum kJumpStage { None, Track, Levitate }
     kJumpStage JumpStage;
     float LevitateTimer;
@@ -26,6 +28,7 @@ public class KeyboardInput : MonoBehaviour
     void Start()
     {
         _player = GetComponent<PlayerBehaviour>();
+        _rb = GetComponent<Rigidbody2D>();
 
         beginPosPlatform = Platform.localPosition;
     }
@@ -150,6 +153,23 @@ public class KeyboardInput : MonoBehaviour
 
     }
 
+    /*public void KeyboardJump()
+    {
+        if (Input.GetKeyDown(JumpButton) && _player.JumpsNum < 1)
+        {
+            _player.Jump();
+            _player.JumpsNum++;
+        }
+        if (_player.rb.velocity.y < 0)            //Ускорение падения
+        {
+            _player.rb.velocity = new Vector2(_player.rb.velocity.x, _player.rb.velocity.y * _player.FallAccelerationValue);
+        }
+        if (_player.isGrounded)
+        {
+            _player.JumpsNum = 0;
+        }
+    }*/
+
     public void KeyboardJump()
     {
         if (Input.GetKeyDown(JumpButton) && _player.JumpsNum < 1)
@@ -166,6 +186,7 @@ public class KeyboardInput : MonoBehaviour
             _player.JumpsNum = 0;
         }
     }
+
     public void SwitchPlatform()
     {
         if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow))

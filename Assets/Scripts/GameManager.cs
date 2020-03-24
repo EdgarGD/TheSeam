@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+//using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     public GameObject BeatLevelCanvas;
     public MobileInput InputClass;
 
-    public Text MainScoreCoinsText;
+    //public Text MainScoreCoinsText;
 
     public static GameManager Gm;             
     public GameObject Player;
@@ -46,8 +46,8 @@ public class GameManager : MonoBehaviour
             Gm = gameObject.GetComponent<GameManager>();
         }
 
-        CurrentLevel = SceneManager.GetActiveScene().name;
-        MainScoreCoinsText.text = "X  " + _scoreCoins.ToString() + "/" + GameObject.FindGameObjectsWithTag("Coin").Length;
+        //CurrentLevel = SceneManager.GetActiveScene().name;
+        //MainScoreCoinsText.text = "X  " + _scoreCoins.ToString() + "/" + GameObject.FindGameObjectsWithTag("Coin").Length;
 
         if (CurrentLevel != MainMenuLevel)
         {
@@ -132,7 +132,7 @@ public class GameManager : MonoBehaviour
         if(tag == "Coin")
         {
             _scoreCoins += amount;
-            MainScoreCoinsText.text = "X  " + _scoreCoins.ToString();
+            //MainScoreCoinsText.text = "X  " + _scoreCoins.ToString();
         }
     }
 
@@ -179,8 +179,8 @@ public class GameManager : MonoBehaviour
         {
             GameState = GameStates.Playing;
             SceneManager.LoadScene(CurrentLevel);
-            GameObject.FindGameObjectWithTag("LiveCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow =
-            Player.transform;
+            //GameObject.FindGameObjectWithTag("LiveCamera").GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow =
+            //Player.transform;
         }
     }
 

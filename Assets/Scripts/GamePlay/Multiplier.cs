@@ -1,13 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+//using UnityEngine.UI;
 
 public class Multiplier : MonoBehaviour
 {
     public int MultiplyFactor;
     public bool Multiplication;
-    public Text UIText;
+    //public Text UIText;
 
     private PlayerBehaviour Player;
 
@@ -27,7 +27,7 @@ public class Multiplier : MonoBehaviour
         }
         else
         {
-            UIText.gameObject.SetActive(false);
+            //UIText.gameObject.SetActive(false);
         }
     }
 
@@ -41,7 +41,7 @@ public class Multiplier : MonoBehaviour
 
     public void UIChange()
     {
-        UIText.gameObject.SetActive(true);
-        UIText.text = MultiplyFactor + "x";
+        //UIText.gameObject.SetActive(true);
+        //UIText.text = MultiplyFactor + "x";
     }
 }

@@ -50,9 +50,10 @@ public class PlayerBehaviour : MonoBehaviour
 
     [Header("Physics")]
 
-    [Range(1, 1.3f)]
-    public float FallAccelerationValue = 1.055f;
-    [HideInInspector]
+    //[Range(1, 1.3f)]
+    public float FallAccelerationValue = 2.5f;
+    public float LowJumpMultiplier = 2f;
+    //[HideInInspector]
     public bool Acc;
     [HideInInspector]
     public float AccelerationPower;
@@ -93,7 +94,7 @@ public class PlayerBehaviour : MonoBehaviour
     private Vector2 _currentPosition;
     private Vector2 _endPosition;
 
-    private KnockBack _knockBack;     // экземпляр класса KnockBack, который отталкивает противника
+    //private KnockBack _knockBack;     // экземпляр класса KnockBack, который отталкивает противника
     public KeyboardInput _keyboardInput;
 
     void Awake()
@@ -104,7 +105,7 @@ public class PlayerBehaviour : MonoBehaviour
         rb.gravityScale = 2;
         scale = transform.localScale.x;
 
-        _knockBack = GetComponent<KnockBack>();
+        //_knockBack = GetComponent<KnockBack>();
         ASourсe = GetComponent<AudioSource>();
 
         ASourсeC = GetComponentInChildren<AudioSource>();
@@ -122,7 +123,7 @@ public class PlayerBehaviour : MonoBehaviour
         {
             if (Scname == "Level" + i)
             {
-                Speed = 8;
+                Speed = 10;
             }
         }
         for (int i = 6; i <= 8; i++)//с какой по какую сцену должна быть скорость одинаковой
@@ -227,7 +228,7 @@ public class PlayerBehaviour : MonoBehaviour
         Anim.SetBool("ReceiveDamage", true);
         Health -= takenDamage;
         transform.GetComponent<Renderer>().material.color = Color.red;
-        //Handheld.Vibrate();                              //Вибрация
+        Handheld.Vibrate();                              //Вибрация
 
         yield return null;
 
@@ -281,6 +282,18 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
+    /*public void Jump()    // прыжок для мобильных устройств, вызывается по нажатию кнопки в MobileInput
+    {
+        if (rb.velocity.y < 0) //Ускорение падения
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (FallAccelerationValue - 1) * Time.deltaTime;
+        }
+        else if (rb.velocity.y > 0 && !Input.GetButton ("Jump"))
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (LowJumpMultiplier - 1) * Time.deltaTime;
+        }
+    }*/
+
     public void DetectEnemy()              // определяем, что враг находится в поле зрения игрока
     {
         _currentPosition = new Vector2(transform.position.x, SightDistance.position.y);
@@ -297,7 +310,7 @@ public class PlayerBehaviour : MonoBehaviour
                 {
                         StartCoroutine(AttackTheEnemy(target));           // атаковать противника
 
-                    _knockBack.HitSomeObject(target);
+                    //_knockBack.HitSomeObject(target);
                 }
                 else if (target.CompareTag("Chest"))
                 {
@@ -319,7 +332,7 @@ public class PlayerBehaviour : MonoBehaviour
         yield return null;
         yield return new WaitForSeconds(GetComponent<Animation>().clip.length*DamageTime);
         
-        if (enemy != null )     // если врага нет - в методе просто проигрывается анимация взмаха меча
+        /*if (enemy != null )     // если врага нет - в методе просто проигрывается анимация взмаха меча
         {
             var enemyBasicAI = enemy.GetComponent<EnemyBasicAI>();
             var enemyBasicBeh = enemy.GetComponent<BasicBehavior>();
@@ -327,7 +340,7 @@ public class PlayerBehaviour : MonoBehaviour
             StartCoroutine(enemyBasicAI.ReceiveDamage(Attack));
             else
             StartCoroutine(enemyBasicBeh.ReceiveDamage(Attack));
-        }
+        }*/
         
 
         yield return new WaitForSeconds(GetComponent<Animation>().clip.length);

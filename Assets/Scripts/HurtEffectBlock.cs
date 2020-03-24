@@ -46,8 +46,8 @@ public class HurtEffectBlock : MonoBehaviour
 
         if (obj.gameObject.CompareTag("Enemy") && _blockIsActive)
         {
-            var enemyBasicAI = obj.GetComponent<EnemyBasicAI>();
-            StartCoroutine(enemyBasicAI.ReceiveDamage(DamageAmount));
+            //var enemyBasicAI = obj.GetComponent<EnemyBasicAI>();
+            //StartCoroutine(enemyBasicAI.ReceiveDamage(DamageAmount));
 
            DisactivateTheBlock();
         }

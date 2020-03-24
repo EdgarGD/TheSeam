@@ -1147,7 +1147,7 @@ PrefabInstance:
     - target: {fileID: 8794806240653250605, guid: 2b8c67e08ae6cd5408b3e82d872834be,
         type: 3}
       propertyPath: m_DynamicOccludee
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8794806240653250605, guid: 2b8c67e08ae6cd5408b3e82d872834be,
         type: 3}
@@ -1914,7 +1914,7 @@ PrefabInstance:
     - target: {fileID: 3529523869389891875, guid: afb02bdd59a0dbf4ebb2f53e3e6ebe0b,
         type: 3}
       propertyPath: Speed
-      value: 10
+      value: 9.79
       objectReference: {fileID: 0}
     - target: {fileID: 3529523869389891875, guid: afb02bdd59a0dbf4ebb2f53e3e6ebe0b,
         type: 3}
@@ -1922,6 +1922,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1396828787896817875, guid: 63ed55c6863dde349aeee198a6dee441,
         type: 3}
+    - target: {fileID: 3529523869389891875, guid: afb02bdd59a0dbf4ebb2f53e3e6ebe0b,
+        type: 3}
+      propertyPath: JumpingVelocity
+      value: 6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3529523869389891875, guid: afb02bdd59a0dbf4ebb2f53e3e6ebe0b,
+        type: 3}
+      propertyPath: DamageTime
+      value: 0.65
+      objectReference: {fileID: 0}
     - target: {fileID: 4068128211539391524, guid: afb02bdd59a0dbf4ebb2f53e3e6ebe0b,
         type: 3}
       propertyPath: m_LocalRotation.z

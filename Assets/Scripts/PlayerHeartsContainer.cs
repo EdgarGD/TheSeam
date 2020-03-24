@@ -1,18 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+//using UnityEngine.UI;
 
 public class PlayerHeartsContainer : MonoBehaviour
 {
     public Sprite[] Hearts;
-    public Image Image;
+    //public Image Image;
 
     private int _playerHealth;
 
     void Awake()
     {
-         Image = GetComponent<Image>();
+         //Image = GetComponent<Image>();
     }
 
 
@@ -25,7 +25,7 @@ public class PlayerHeartsContainer : MonoBehaviour
         {
             _playerHealth = 0;
         }
-        Image.sprite = Hearts[_playerHealth];
+        //Image.sprite = Hearts[_playerHealth];
 
     }
 }

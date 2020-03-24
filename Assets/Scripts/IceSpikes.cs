@@ -7,7 +7,7 @@ public class IceSpikes : MonoBehaviour
     public float TimeBetweenAttack = .02f;
     public float TimeTillAttack;
     public int DamageAmount = 1;
-    public KnockBack _knockBack;
+    //public KnockBack _knockBack;
     public bool IsOnSpike = false;
     private bool hitBoole;
 
